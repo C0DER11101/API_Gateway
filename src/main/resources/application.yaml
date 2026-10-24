@@ -1,0 +1,29 @@
+server:
+  application:
+    name: api_gateway
+  port: 8085
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+spring:
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      discovery:
+        locator: enabled
+        lowerCaseServiceId: true
+      routes:
+        - id: "workflow-definition"
+          uri: http://localhost:8081
+          predicates:
+            - Path=/workflow-def/**
+        - id: "ai-service"
+          uri: http://localhost:8082
+          predicates:
+            - Path=/ai-service/**
